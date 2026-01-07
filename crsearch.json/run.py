@@ -87,6 +87,12 @@ class Validator(object):
                                             'type': 'string',
                                         },
                                     },
+                                    'aliases': {
+                                        'type': 'array',
+                                        'items': {
+                                            'type': 'string',
+                                        },
+                                    },
                                 },
                             },
                         },
@@ -408,6 +414,18 @@ class Generator(object):
                     attributes.append('deprecated_in_latest')
 
                 index['attributes'] = attributes
+
+        # alias メタ情報を処理（カンマ区切りで複数のエイリアスを指定可能）
+        if 'alias' in metas:
+            aliases = []
+            for alias_entry in metas['alias']:
+                # カンマ区切りで複数のエイリアスを分割
+                for alias in alias_entry.split(','):
+                    alias = alias.strip()
+                    if alias:
+                        aliases.append(alias)
+            if aliases:
+                index['aliases'] = aliases
 
         return index, metas
 

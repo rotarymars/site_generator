@@ -16,6 +16,13 @@ class TestRun(unittest.TestCase):
         result = run.Generator().get_meta(md)
         self.assertEqual({'text': ['foo', 'piyo'], 'text2': ['bar']}, result)
 
+    def test_get_meta_alias(self):
+        md = '''\
+            * text1,text2,text3[meta alias]
+        '''
+        result = run.Generator().get_meta(md)
+        self.assertEqual({'alias': ['text1,text2,text3']}, result)
+
     def test_validate(self):
         value = {
             'base_url': 'https://cpprefjp.github.io',
@@ -33,6 +40,30 @@ class TestRun(unittest.TestCase):
                         {
                             'id': 0,
                             'page_id': ['operator_at'],
+                        },
+                    ],
+                },
+            ],
+        }
+        run.Validator().validate(value)
+
+    def test_validate_with_aliases(self):
+        value = {
+            'base_url': 'https://cpprefjp.github.io',
+            'database_name': 'cpprefjp',
+            'ids': [{
+                'type': 'header',
+                'key': ['vector'],
+            }],
+            'namespaces': [
+                {
+                    'namespace': ['reference'],
+                    'path_prefixes': ['reference'],
+                    'indexes': [
+                        {
+                            'id': 0,
+                            'page_id': ['vector'],
+                            'aliases': ['dynamic array', 'resizable array'],
                         },
                     ],
                 },
