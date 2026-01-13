@@ -415,6 +415,11 @@ class Generator(object):
 
                 index['attributes'] = attributes
 
+        if 'exposition-only' in metas:
+            if 'attributes' not in index:
+                index['attributes'] = []
+            index['attributes'].append('exposition-only')
+
         # alias メタ情報を処理（カンマ区切りで複数のエイリアスを指定可能）
         if 'alias' in metas:
             aliases = []
